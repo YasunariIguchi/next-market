@@ -3,12 +3,20 @@ import connectDB from "@/app/utils/database";
 import { ItemModel } from "@/app/utils/schemaModels";
 
 export async function DELETE(request, context){
+    const reqBody = await request.json()
     try{
         await connectDB()
-        await ItemModel.deleteOne({_id: context.params.id})
-        return NextResponse.json({
-            message: "アイテム削除成功だお",
-        })
+        const singleItem = await ItemModel.findById(context.params.id)
+        if(singleItem.email === reqBody.email){
+            await ItemModel.deleteOne({_id: context.params.id})
+            return NextResponse.json({
+                message: "アイテム削除成功だお",
+            })
+        }else{
+            return NextResponse.json({
+                message: "他の人が作成したアイテムだお",
+            })
+        }
     }catch{
         return NextResponse.json({message: "アイテム削除失敗だお。。"})
     }
