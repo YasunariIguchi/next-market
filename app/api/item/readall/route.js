@@ -14,3 +14,5 @@ export async function GET(request){
         return NextResponse.json({message: "アイテム一覧取得失敗だお。。"})
     }
 }
+
+export const revalidate = 0
